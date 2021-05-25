@@ -3,7 +3,6 @@ package com.cabman.demo.service;
 import com.cabman.demo.model.Booking;
 import com.cabman.demo.model.Cab;
 import com.cabman.demo.model.CabStatus;
-import com.cabman.demo.model.exception.CabNotFoundException;
 import com.cabman.demo.model.exception.ResourceNotFoundException;
 import com.cabman.demo.repository.BookingRepository;
 import com.cabman.demo.repository.CabRepository;
@@ -35,7 +34,8 @@ public class BookingService implements IBooking{
     public Booking bookInCity( UUID cityId) {
         List<Cab> cabsInCity = cabService.getCabByCityAndStatus(cityId, CabStatus.Status.IDLE);
         if(cabsInCity == null || cabsInCity.size() == 0)
-            throw new CabNotFoundException();
+            throw new ResourceNotFoundException("Cab Not Found");
+
         Booking booking = new Booking();
         booking.setFromCity(cityId);
         booking.setCabId(cabsInCity.get(0).getId());
