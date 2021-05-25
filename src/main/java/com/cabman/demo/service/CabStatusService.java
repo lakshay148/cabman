@@ -1,6 +1,8 @@
 package com.cabman.demo.service;
 
 import com.cabman.demo.model.CabStatus;
+import com.cabman.demo.repository.CabStatusRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -9,9 +11,15 @@ import java.util.UUID;
 
 @Service
 public class CabStatusService implements ICabStatus{
+
+    @Autowired
+    CabStatusRepository cabStatusRepository;
+
     @Override
     public CabStatus.Status change(UUID cabId, CabStatus.Status from, CabStatus.Status to) {
-        return null;
+        CabStatus cabStatus = new CabStatus(cabId, from, to);
+        CabStatus cabStatusSaved = cabStatusRepository.save(cabStatus);
+        return cabStatusSaved.getNewStatus();
     }
 
     @Override
