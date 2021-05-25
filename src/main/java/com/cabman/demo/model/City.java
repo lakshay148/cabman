@@ -5,34 +5,26 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.util.Date;
 import java.util.UUID;
 
-
 @Entity
 @Data
-public class Cab {
-
-    public enum CabStatus {
-        IDLE, ON_TRIP, FAULTY
-    }
-
+public class City {
     @Id
     @Type(type = "uuid-char")
     @GeneratedValue(generator = "uuid4")
     @GenericGenerator(name = "uuid4", strategy = "org.hibernate.id.UUIDGenerator")
     UUID id;
 
-    @Column(length = 15)
-    String registrationNumber;
+    @Column(length = 120)
+    String name;
 
-    @Enumerated(EnumType.STRING)
-    @Column(length = 20)
-    CabStatus status = CabStatus.IDLE;
-
-    @Type(type = "uuid-char")
-    UUID cityId;
+    int pincode;
 
     @CreationTimestamp
     Date addedOn;

@@ -9,13 +9,12 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.UUID;
 
-
 @Entity
 @Data
-public class Cab {
+public class Booking {
 
-    public enum CabStatus {
-        IDLE, ON_TRIP, FAULTY
+    public enum BookingStatus {
+        BOOKED, WAITING, REJECTED
     }
 
     @Id
@@ -24,16 +23,13 @@ public class Cab {
     @GenericGenerator(name = "uuid4", strategy = "org.hibernate.id.UUIDGenerator")
     UUID id;
 
-    @Column(length = 15)
-    String registrationNumber;
+    @Type(type = "uuid-char")
+    UUID cabId;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
-    CabStatus status = CabStatus.IDLE;
-
-    @Type(type = "uuid-char")
-    UUID cityId;
+    BookingStatus status;
 
     @CreationTimestamp
-    Date addedOn;
+    Date createdOn;
 }
