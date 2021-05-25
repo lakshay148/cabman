@@ -10,10 +10,8 @@ import com.cabman.demo.repository.CabStatusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class BookingService implements IBooking{
@@ -38,11 +36,32 @@ public class BookingService implements IBooking{
 
         Booking booking = new Booking();
         booking.setFromCity(cityId);
-        booking.setCabId(cabsInCity.get(0).getId());
+        UUID cabId = null;
+        if(cabsInCity.size()>1){
+            List<UUID> cabIds = getCabIds(cabsInCity);
+            List<CabStatus> cabStatuses = statusRepository.findAllByCabIdInOrderByChangeTimeDesc(cabIds);
+            HashMap<UUID, Date> cabIdleTimes = new HashMap<>();
+            for(CabStatus status : cabStatuses){
+                if(!cabIdleTimes.containsKey(status.getCabId())){
+                    cabIdleTimes.put(status.getCabId(), status.getChangeTime());
+                }
+            }
+            Date minDate = new Date();
+            for(Map.Entry<UUID, Date> entry : cabIdleTimes.entrySet()){
+                if(entry.getValue().before(minDate)){
+                    cabId = entry.getKey();
+                }
+            }
+//            cabId = cabsInCity.get(0).getId();
+        } else {
+            cabId = cabsInCity.get(0).getId();
+        }
+
+        booking.setCabId(cabId);
         booking.setStatus(Booking.BookingStatus.BOOKED);
 
         //TODO a transaction here
-        Optional<Cab> cabOptional = cabRepository.findById(cabsInCity.get(0).getId());
+        Optional<Cab> cabOptional = cabRepository.findById(cabId);
         Cab cab = cabOptional.get();
         cab.setStatus(CabStatus.Status.ON_TRIP);
         CabStatus cabStatus = new CabStatus();
@@ -59,5 +78,10 @@ public class BookingService implements IBooking{
     @Override
     public List<Booking> getCabBookingFromAndTo(UUID cabId, Date from, Date to) {
         return null;
+    }
+
+    List<UUID> getCabIds(List<Cab> cabs){
+        List<UUID> cabIds  = (List<UUID>) cabs.stream().map(cab -> cab.getId()).collect(Collectors.toList());
+        return cabIds;
     }
 }

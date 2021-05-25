@@ -38,8 +38,9 @@ public class CabService implements ICab{
         {
             savedCab = cabRepository.save(cab);
         } catch (DataIntegrityViolationException exception){
-        throw new BadRequestException("Cab already registerd");
-    }
+            throw new BadRequestException("Cab already registerd");
+        }
+        cabStatusService.change(cab.getId(), null, CabStatus.Status.IDLE);
         return savedCab;
     }
 
@@ -53,8 +54,7 @@ public class CabService implements ICab{
             if(cab.getStatus() == cabToUpdate.getStatus())
                 throw new BadRequestException("status is already "+ cab.getStatus());
 
-            //TODO Match if current status and next status are not same
-            // can also make independent requests
+            //TODO can also make independent requests to avoid it to make a transaction
             cabStatusService.change(cab.getId(), cabToUpdate.getStatus() , cab.getStatus());
             cabToUpdate.setStatus(cab.getStatus());
         }
