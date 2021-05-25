@@ -26,6 +26,9 @@ public class Booking {
     @Type(type = "uuid-char")
     UUID cabId;
 
+    @Type(type = "uuid-char")
+    UUID fromCity;
+
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
     BookingStatus status;

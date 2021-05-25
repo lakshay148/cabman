@@ -14,10 +14,6 @@ import java.util.UUID;
 @Data
 public class Cab {
 
-    public enum CabStatus {
-        IDLE, ON_TRIP, FAULTY
-    }
-
     @Id
     @Type(type = "uuid-char")
     @GeneratedValue(generator = "uuid4")
@@ -29,7 +25,7 @@ public class Cab {
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
-    CabStatus status = CabStatus.IDLE;
+    CabStatus.Status status = CabStatus.Status.IDLE;
 
     @Type(type = "uuid-char")
     UUID cityId;
