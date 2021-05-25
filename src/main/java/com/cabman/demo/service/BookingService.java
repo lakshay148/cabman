@@ -11,7 +11,7 @@ import java.util.UUID;
 public class BookingService implements IBooking{
 
     @Override
-    public Booking book(UUID cabId, UUID cityId) {
+    public Booking bookInCity( UUID cityId) {
         return null;
     }
 

@@ -26,7 +26,7 @@ public class City {
 
     int pincode;
 
-    boolean active;
+    boolean active = true;
 
     @CreationTimestamp
     Date addedOn;

@@ -8,5 +8,6 @@ import java.util.UUID;
 
 public interface ICab {
     Cab registerCab(Cab cab);
+    Cab updateCab(Cab cab);
     List<Cab> getCabByCityAndStatus(UUID cityId, CabStatus.Status cabStatus);
 }

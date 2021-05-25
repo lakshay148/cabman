@@ -7,6 +7,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface IBooking {
-    Booking book(UUID cabId, UUID cityId);
+    Booking bookInCity(UUID cityId);
     List<Booking> getCabBookingFromAndTo(UUID cabId, Date from, Date to);
 }

@@ -1,6 +1,7 @@
 package com.cabman.demo.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
@@ -12,7 +13,13 @@ import java.util.UUID;
 
 @Entity
 @Data
+@NoArgsConstructor
 public class Cab {
+
+    public Cab(String registrationNumber, UUID cityId) {
+        this.registrationNumber = registrationNumber;
+        this.cityId = cityId;
+    }
 
     @Id
     @Type(type = "uuid-char")
