@@ -36,8 +36,11 @@ public class CityController {
 
     @PutMapping("/{cityId}")
     ResponseEntity unRegister(@RequestBody UnRegisterRequest request, @PathVariable String cityId){
-        if(request.getAction().equalsIgnoreCase("unregister")){
-            City city = cityService.unRegister(UUID.fromString(cityId));
+        if(request.getAction().equalsIgnoreCase("activate")){
+            City city = cityService.activate(UUID.fromString(cityId));
+            return ResponseEntity.status(HttpStatus.OK).body(city);
+        } else if (request.getAction().equalsIgnoreCase("deactivate")){
+            City city = cityService.deactivate(UUID.fromString(cityId));
             return ResponseEntity.status(HttpStatus.OK).body(city);
         }
         return ResponseEntity.status(HttpStatus.OK).build();

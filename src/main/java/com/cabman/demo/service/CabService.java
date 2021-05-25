@@ -3,10 +3,12 @@ package com.cabman.demo.service;
 import com.cabman.demo.model.Cab;
 import com.cabman.demo.model.CabStatus;
 import com.cabman.demo.model.City;
+import com.cabman.demo.model.exception.BadRequestException;
 import com.cabman.demo.model.exception.ResourceNotFoundException;
 import com.cabman.demo.repository.CabRepository;
 import com.cabman.demo.repository.CityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,7 +26,16 @@ public class CabService implements ICab{
 
     @Override
     public Cab registerCab(Cab cab) {
-        Cab savedCab = cabRepository.save(cab);
+        Optional<City> savedCity =  cityRepository.findById(cab.getCityId());
+        if(savedCity.isEmpty())
+            throw new ResourceNotFoundException("City not found");
+        Cab savedCab;
+        try
+        {
+            savedCab = cabRepository.save(cab);
+        } catch (DataIntegrityViolationException exception){
+        throw new BadRequestException("Cab already registerd");
+    }
         return savedCab;
     }
 

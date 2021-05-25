@@ -7,6 +7,7 @@ import java.util.UUID;
 
 public interface ICity {
     City register(City city);
-    City unRegister(UUID cityId);
+    City activate(UUID cityId);
+    City deactivate(UUID cityId);
     List<City> getRegisteredCities();
 }

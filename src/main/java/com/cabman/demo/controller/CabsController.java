@@ -3,9 +3,12 @@ package com.cabman.demo.controller;
 import com.cabman.demo.controller.request.UpdateCabRequest;
 import com.cabman.demo.model.Cab;
 import com.cabman.demo.controller.request.AddCabRequest;
+import com.cabman.demo.model.exception.BadRequestException;
 import com.cabman.demo.service.CabService;
 import com.cabman.demo.service.CabStatusService;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,8 +33,8 @@ public class CabsController {
     @PostMapping
     public ResponseEntity registerCab(@RequestBody AddCabRequest request){
         Cab cabToAdd = new Cab(request.getRegistrationNumber(), request.getCityId());
-        Cab cab = cabService.registerCab(cabToAdd);
-        return ResponseEntity.status(HttpStatus.CREATED).body(cab);
+        Cab addedCab = cabService.registerCab(cabToAdd);
+        return ResponseEntity.status(HttpStatus.CREATED).body(addedCab);
     }
 
     @PutMapping("{cabId}")

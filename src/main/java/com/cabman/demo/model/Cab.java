@@ -27,7 +27,7 @@ public class Cab {
     @GenericGenerator(name = "uuid4", strategy = "org.hibernate.id.UUIDGenerator")
     UUID id;
 
-    @Column(length = 15)
+    @Column(length = 15, unique = true)
     String registrationNumber;
 
     @Enumerated(EnumType.STRING)
