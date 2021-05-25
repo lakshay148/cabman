@@ -27,8 +27,7 @@ public class CabsController {
     @Autowired
     CabService cabService;
 
-    @Autowired
-    CabStatusService cabStatusService;
+
 
     @PostMapping
     public ResponseEntity registerCab(@RequestBody AddCabRequest request){
@@ -45,8 +44,7 @@ public class CabsController {
         cabToUpdate.setStatus(request.getStatus());
         Cab updatedCab = cabService.updateCab(cabToUpdate);
 
-        //TODO Match if current status and next status are not same
-        cabStatusService.change(updatedCab.getId(), updatedCab.getStatus() , request.getStatus());
+
         return ResponseEntity.status(HttpStatus.OK).body(updatedCab);
     }
 }

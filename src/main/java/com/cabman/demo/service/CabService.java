@@ -21,8 +21,12 @@ public class CabService implements ICab{
 
     @Autowired
     CabRepository cabRepository;
+
     @Autowired
     CityRepository cityRepository;
+
+    @Autowired
+    CabStatusService cabStatusService;
 
     @Override
     public Cab registerCab(Cab cab) {
@@ -43,13 +47,21 @@ public class CabService implements ICab{
     public Cab updateCab(Cab cab) {
         Optional<Cab> savedCab = cabRepository.findById(cab.getId());
         if(savedCab.isEmpty())
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException("Cab not found");
         Cab cabToUpdate = savedCab.get();
-        if(cab.getStatus() != null) cabToUpdate.setStatus(cab.getStatus());
+        if(cab.getStatus() != null) {
+            if(cab.getStatus() == cabToUpdate.getStatus())
+                throw new BadRequestException("status is already "+ cab.getStatus());
+
+            //TODO Match if current status and next status are not same
+            // can also make independent requests
+            cabStatusService.change(cab.getId(), cabToUpdate.getStatus() , cab.getStatus());
+            cabToUpdate.setStatus(cab.getStatus());
+        }
         if(cab.getCityId() != null){
             Optional<City> savedCity =  cityRepository.findById(cab.getCityId());
             if(savedCity.isEmpty())
-                throw new ResourceNotFoundException();
+                throw new ResourceNotFoundException("City not found");
             cabToUpdate.setCityId(cab.getCityId());
         }
         cabRepository.save(cabToUpdate);
@@ -58,6 +70,9 @@ public class CabService implements ICab{
 
     @Override
     public List<Cab> getCabByCityAndStatus(UUID cityId, CabStatus.Status cabStatus) {
+        Optional<City> savedCity =  cityRepository.findById(cityId);
+        if(savedCity.isEmpty())
+            throw new ResourceNotFoundException("City not found");
         List<Cab> idleCabs = cabRepository.findAllByCityIdAndStatus(cityId, cabStatus);
         return idleCabs;
     }

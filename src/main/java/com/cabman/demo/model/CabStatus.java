@@ -30,9 +30,11 @@ public class CabStatus {
     @Type(type = "uuid-char")
     UUID cabId;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "current_status" , length = 20)
     Status currentStatus;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "new_status", length = 20)
     Status newStatus;
 
