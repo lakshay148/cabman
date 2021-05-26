@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,7 +21,7 @@ public class CityController {
     CityService cityService;
 
     @PostMapping
-    public ResponseEntity registerCity(@RequestBody AddCityRequest request){
+    public ResponseEntity registerCity(@RequestBody @Valid AddCityRequest request){
         City city = new City();
         city.setName(request.getName());
         city.setPincode(request.getPincode());

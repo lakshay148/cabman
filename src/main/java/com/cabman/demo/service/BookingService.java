@@ -38,6 +38,7 @@ public class BookingService implements IBooking{
         booking.setFromCity(cityId);
         UUID cabId = null;
         if(cabsInCity.size()>1){
+            //TODO this can be optimized with having a idle from column in cab
             List<UUID> cabIds = getCabIds(cabsInCity);
             List<CabStatus> cabStatuses = statusRepository.findAllByCabIdInOrderByChangeTimeDesc(cabIds);
             HashMap<UUID, Date> cabIdleTimes = new HashMap<>();
@@ -52,7 +53,6 @@ public class BookingService implements IBooking{
                     cabId = entry.getKey();
                 }
             }
-//            cabId = cabsInCity.get(0).getId();
         } else {
             cabId = cabsInCity.get(0).getId();
         }
@@ -70,8 +70,6 @@ public class BookingService implements IBooking{
         cabStatus.setNewStatus(CabStatus.Status.ON_TRIP);
         statusRepository.save(cabStatus);
         Booking savedBooking = bookingRepository.save(booking);
-
-
         return savedBooking;
     }
 
