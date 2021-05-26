@@ -32,7 +32,7 @@ public class BookingService implements IBooking{
     public Booking bookInCity( UUID cityId) {
         List<Cab> cabsInCity = cabService.getCabByCityAndStatus(cityId, CabStatus.Status.IDLE);
         if(cabsInCity == null || cabsInCity.size() == 0)
-            throw new ResourceNotFoundException("Cab Not Found");
+            throw new ResourceNotFoundException("No Cab in the city");
 
         Booking booking = new Booking();
         booking.setFromCity(cityId);
@@ -50,6 +50,7 @@ public class BookingService implements IBooking{
             Date minDate = new Date();
             for(Map.Entry<UUID, Date> entry : cabIdleTimes.entrySet()){
                 if(entry.getValue().before(minDate)){
+                    minDate = entry.getValue();
                     cabId = entry.getKey();
                 }
             }

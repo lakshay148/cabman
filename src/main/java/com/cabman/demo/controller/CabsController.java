@@ -29,7 +29,6 @@ public class CabsController {
     CabService cabService;
 
 
-
     @PostMapping
     public ResponseEntity registerCab(@RequestBody @Valid AddCabRequest request){
         Cab cabToAdd = new Cab(request.getRegistrationNumber(), request.getCityId());

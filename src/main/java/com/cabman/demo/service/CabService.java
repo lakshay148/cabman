@@ -38,7 +38,7 @@ public class CabService implements ICab{
         {
             savedCab = cabRepository.save(cab);
         } catch (DataIntegrityViolationException exception){
-            throw new BadRequestException("Cab already registerd");
+            throw new BadRequestException("Cab already registered");
         }
         cabStatusService.change(cab.getId(), null, CabStatus.Status.IDLE);
         return savedCab;
